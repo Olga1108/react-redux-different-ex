@@ -6,18 +6,16 @@ import { v4 as uuidv4 } from 'uuid';
 import { heroCreated } from '../../actions';
 
 const HeroesAddForm = () => {
-
     const [heroName, setHeroName] = useState('');
     const [heroDescr, setHeroDescr] = useState('');
     const [heroElement, setHeroElement] = useState('');
 
-    const {filters, filtersLoadingStatus} = useSelector(state => state);
+    const {filters, filtersLoadingStatus} = useSelector(state => state.filters);
     const dispatch = useDispatch();
     const {request} = useHttp();
 
     const onSubmitHandler = (e) => {
         e.preventDefault();
-   
         const newHero = {
             id: uuidv4(),
             name: heroName,
@@ -26,7 +24,7 @@ const HeroesAddForm = () => {
         }
 
         request("http://localhost:3001/heroes", "POST", JSON.stringify(newHero))
-            .then(res => console.log(res, 'Success!'))
+            .then(res => console.log(res, 'Отправка успешна'))
             .then(dispatch(heroCreated(newHero)))
             .catch(err => console.log(err));
 
@@ -44,7 +42,6 @@ const HeroesAddForm = () => {
         
         if (filters && filters.length > 0 ) {
             return filters.map(({name, label}) => {
-               
                 // eslint-disable-next-line
                 if (name === 'all')  return;
 
